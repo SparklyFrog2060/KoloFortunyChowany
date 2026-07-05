@@ -1,0 +1,55 @@
+{
+  "entities": {
+    "username": {
+      "title": "Username Map",
+      "description": "Maps unique usernames to Firebase Auth UIDs",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The Firebase Auth UID of the user" },
+        "username": { "type": "string", "description": "The user's display name" },
+        "createdAt": { "type": "number", "description": "Creation timestamp in milliseconds" }
+      },
+      "required": ["uid", "username", "createdAt"]
+    },
+    "player": {
+      "title": "Player",
+      "description": "Represents a physical player in the hide and seek game",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Display name of the player" },
+        "acceptedPool": { "type": "array", "description": "List of player names this player accepts to play with" },
+        "createdAt": { "type": "number", "description": "Creation timestamp in milliseconds" }
+      },
+      "required": ["name", "acceptedPool", "createdAt"]
+    },
+    "game": {
+      "title": "Game State",
+      "description": "The shared central real-time state of the game session",
+      "type": "object",
+      "properties": {
+        "seekerPool": { "type": "array", "description": "List of eligible players for the seeker role" },
+        "activePlayers": { "type": "array", "description": "List of currently checked-in present players" },
+        "seeker": { "type": "string", "description": "The name of the currently designated seeker" },
+        "drawnPlayers": { "type": "array", "description": "List of hiders wylosowanych so far" },
+        "gameInProgress": { "type": "boolean", "description": "Whether the game session is active" },
+        "lastDrawTime": { "type": "number", "description": "Timestamp of the last spin complete" },
+        "currentSpin": { "type": "object", "description": "State of any ongoing active wheel spin" }
+      },
+      "required": ["seekerPool", "activePlayers", "seeker", "drawnPlayers", "gameInProgress", "lastDrawTime", "currentSpin"]
+    }
+  },
+  "firestore": {
+    "/usernames/{username}": {
+      "schema": { "$ref": "#/entities/username" },
+      "description": "Maps clean lowercase usernames to UIDs"
+    },
+    "/players/{playerId}": {
+      "schema": { "$ref": "#/entities/player" },
+      "description": "Registered players pool"
+    },
+    "/games/{gameId}": {
+      "schema": { "$ref": "#/entities/game" },
+      "description": "Shared active game session configurations"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Usernames collection rules (handles uniqueness check and registration mapping)
+    match /usernames/{username} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    // Players collection rules
+    match /players/{playerId} {
+      allow read, write: if isSignedIn();
+    }
+
+    // Games collection rules
+    match /games/{gameId} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}

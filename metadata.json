@@ -1,0 +1,6 @@
+{
+  "name": "Koło Fortuny Chowanego",
+  "description": "Koło fortuny do losowania szukającego oraz uczestników gry w chowanego z ukrytymi pulami i zapisem w Firebase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
